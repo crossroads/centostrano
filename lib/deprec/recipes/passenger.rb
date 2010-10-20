@@ -59,7 +59,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       ]
 
       desc "Install passenger"
-      task :install, :roles => :passenger do
+      task :install, :roles => :web do
         install_deps
         deprec2.download_src(SRC_PACKAGES[:passenger], src_dir)
 
@@ -88,7 +88,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
 
       # install dependencies for nginx
-      task :install_deps, :roles => :passenger do
+      task :install_deps, :roles => :web do
         apt.install( {:base => %w(rsync apr-devel)}, :stable )
         gem2.install 'fastthread'
         gem2.install 'rack'
@@ -187,7 +187,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
       
       desc "Restart Apache"
-      task :restart_apache, :roles => :passenger do
+      task :restart_apache, :roles => :web do
         run "#{sudo} /etc/init.d/httpd restart"
       end
       
