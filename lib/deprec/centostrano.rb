@@ -9,7 +9,7 @@ module Yum
     when :rpmforge
       rpm_install("http://dag.wieers.com/rpm/packages/rpmforge-release/rpmforge-release-0.3.6-1.el5.rf.`uname -i`.rpm")
     when :epel
-      sudo "sudo test -f /etc/yum.repos.d/epel.repo || sudo rpm -U http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm"
+      sudo "sudo test -f /etc/yum.repos.d/epel.repo || sudo rpm -U http://download.fedora.redhat.com/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm"
     end
   end
   
@@ -24,7 +24,8 @@ module Yum
   def install_from_src(src_package, src_dir)
     package_dir = File.join(src_dir, src_package[:dir])
     deprec2.unpack_src(src_package, src_dir)
-    enable_repository :rpmforge
+    # Disabled because it causes conflicts
+    # enable_repository :rpmforge 
     enable_repository :epel
     rpm_install("http://www.asic-linux.com.mx/~izto/checkinstall/files/rpm/checkinstall-1.6.1-1.i386.rpm") 
     apt.install( {:base => %w(gcc gcc-c++ make patch rpm-build which)}, :stable )
