@@ -114,7 +114,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         server_type = send("#{server}_server_type").to_sym
         if server_type != :none
           metaclass.send(:define_method, server) { namespaces[server] }
-          self.namespaces[server] = deprec.send(server_type)
+          self.namespaces[server] = send(server_type)
         end
       end
     end
