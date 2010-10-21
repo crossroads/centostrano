@@ -10,7 +10,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       set :apache_ssl_forward_all, apache_ssl_enabled
       set :apache_ssl_chainfile, false
       set :apache_modules_enabled, %w(rewrite ssl proxy_balancer proxy_http deflate expires headers)
-      set :apache_log_dir, '/var/log/apache2'
+      set :apache_log_dir, '/var/log/httpd'
        
       desc "Install apache"
       task :install do
@@ -27,22 +27,22 @@ Capistrano::Configuration.instance(:must_exist).load do
       SYSTEM_CONFIG_FILES[:apache] = [
         
         { :template => 'apache2.conf.erb',
-          :path => '/etc/apache2/apache2.conf',
+          :path => '/etc/httpd/conf/httpd.conf',
           :mode => 0644,
           :owner => 'root:root'},
 
         { :template => 'namevirtualhosts.conf',
-          :path => '/etc/apache2/conf.d/namevirtualhosts.conf',
+          :path => '/etc/httpd/conf.d/namevirtualhosts.conf',
           :mode => 0644,
           :owner => 'root:root'},
           
         { :template => 'ports.conf.erb',
-          :path => '/etc/apache2/ports.conf',
+          :path => '/etc/httpd/ports.conf',
           :mode => 0644,
           :owner => 'root:root'},
 
         { :template => 'status.conf.erb',
-          :path => '/etc/apache2/mods-available/status.conf',
+          :path => '/etc/httpd/mods-available/status.conf',
           :mode => 0644,
           :owner => 'root:root'}
           
@@ -107,32 +107,32 @@ Capistrano::Configuration.instance(:must_exist).load do
       
       desc "Start Apache"
       task :start, :roles => :web do
-        send(run_method, "/etc/init.d/apache2 start")
+        send(run_method, "/etc/init.d/httpd start")
       end
 
       desc "Stop Apache"
       task :stop, :roles => :web do
-        send(run_method, "/etc/init.d/apache2 stop")
+        send(run_method, "/etc/init.d/httpd stop")
       end
 
       desc "Restart Apache"
       task :restart, :roles => :web do
-        send(run_method, "/etc/init.d/apache2 restart")
+        send(run_method, "/etc/init.d/httpd restart")
       end
 
       desc "Reload Apache"
       task :reload, :roles => :web do
-        send(run_method, "/etc/init.d/apache2 force-reload")
+        send(run_method, "/etc/init.d/httpd force-reload")
       end
 
       desc "Set apache to start on boot"
       task :activate, :roles => :web do
-        send(run_method, "update-rc.d apache2 defaults")
+        send(run_method, "update-rc.d httpd defaults")
       end
       
       desc "Set apache to not start on boot"
       task :deactivate, :roles => :web do
-        send(run_method, "update-rc.d -f apache2 remove")
+        send(run_method, "update-rc.d -f httpd remove")
       end
       
       task :backup, :roles => :web do
