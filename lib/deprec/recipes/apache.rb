@@ -122,7 +122,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       desc "Reload Apache"
       task :reload, :roles => :web do
-        send(run_method, "/etc/init.d/httpd force-reload")
+        send(run_method, "/etc/init.d/httpd reload")
       end
 
       desc "Set apache to start on boot"
